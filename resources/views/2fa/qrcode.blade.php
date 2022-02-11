@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('2FA') }}</div>
+                <div class="card-header">{{ __('2FA - QR Code') }}</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -18,7 +18,18 @@
 
                     <h3>{{ Auth::user()->google2fa_secret }}</h3>
 
-                    <p>show next button to "show enter otp form"</p>
+                    <div class="row mb-0">
+                        <div class="col-md-4">
+                            <a class="btn btn-default" href="{{ route('home') }}">
+                                {{ __('Cancel') }}
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a class="btn btn-primary" href="{{ route('2fa.otp') }}">
+                                {{ __('Next') }}
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

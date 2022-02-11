@@ -35,10 +35,19 @@ class HomeController extends Controller
     public function show2faQrcode(Request $request)
     {
         if(! $request->user()->google2fa_enabled) {
-            return redirect()->back()->with('status', "2FA is not enabled.");
+            return redirect()->route('home')->with('status', "2FA is not enabled.");
         }
 
         return view('2fa.qrcode');
+    }
+
+    public function show2faOtp(Request $request)
+    {
+        if(! $request->user()->google2fa_enabled) {
+            return redirect()->route('home')->with('status', "2FA is not enabled.");
+        }
+
+        return view('2fa.otp');
     }
 
     public function toogle2fa(Request $request)
