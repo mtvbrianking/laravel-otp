@@ -7,6 +7,10 @@ Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::post('/toogle2fa', [HomeController::class, 'toogle2fa'])
+Route::get('/2fa', [HomeController::class, 'show2faQrcode'])
 	->middleware('password.confirm')
-	->name('toogle.2fa');
+	->name('2fa.qrcode');
+
+Route::post('/2fa', [HomeController::class, 'toogle2fa'])
+	->middleware('password.confirm')
+	->name('2fa.toogle');

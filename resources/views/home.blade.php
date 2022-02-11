@@ -16,7 +16,7 @@
 
                     <p>{{ Auth::user()->google2fa_enabled ? 'enabled' : 'disabled' }}</p>
 
-                    <form id="toogle-2fa-form" action="{{ route('toogle.2fa') }}" method="POST">
+                    <form id="toogle-2fa-form" action="{{ route('2fa.toogle') }}" method="POST">
                         @csrf
                         <div class="form-check form-switch mt-2">
                             <input class="form-check-input" type="checkbox" 

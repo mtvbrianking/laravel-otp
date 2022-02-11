@@ -32,6 +32,15 @@ class HomeController extends Controller
         return view('home');
     }
 
+    public function show2faQrcode(Request $request)
+    {
+        if(! $request->user()->google2fa_enabled) {
+            return redirect()->back()->with('status', "2FA is not enabled.");
+        }
+
+        return view('2fa.qrcode');
+    }
+
     public function toogle2fa(Request $request)
     {
         // \Log::debug('toogle2fa#0', $request->all());
@@ -47,7 +56,7 @@ class HomeController extends Controller
 
             // \Log::debug('toogle2fa#2', $user->toArray());
 
-            return redirect()->back();
+            return redirect()->route('2fa.qrcode');
         }
 
         // show 2fa setup qrcode
