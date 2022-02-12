@@ -18,12 +18,13 @@
 
                     <small class="d-block mb-2">Must have scan the QRCode with the Google Authenticator App to get an OTP</small>
 
-                    <form method="POST" action="{{-- route('2fa.opt.validate') --}}">
+                    <form method="POST" action="{{-- route('2fa.opt.verify') --}}">
                         @csrf
 
                         <div class="row mb-3">
                             <div class="col">
-                                <input type="number" class="form-control @error('otp') is-invalid @enderror" id="otp" name="otp" placeholder="Enter OTP" required autofocus />
+                                <input type="number" class="form-control @error('otp') is-invalid @enderror" 
+                                    id="otp" name="otp" placeholder="Enter OTP" pattern="[0-9]{6}" required autofocus />
 
                                 @error('otp')
                                     <span class="invalid-feedback" role="alert">
@@ -36,12 +37,12 @@
                         <div class="row mb-0">
                             <div class="col-md-4">
                                 <a class="btn btn-default" href="{{ route('2fa.qrcode') }}">
-                                    {{ __('Scan QRCode') }}
+                                    {{ __('Rescan QRCode') }}
                                 </a>
                             </div>
                             <div class="col-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    {{ __('Submit') }}
+                                    {{ __('Complete Setup') }}
                                 </button>
                             </div>
                         </div>

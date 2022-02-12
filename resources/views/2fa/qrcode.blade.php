@@ -16,7 +16,17 @@
 
                     <p>{{ Auth::user()->google2fa_enabled ? 'enabled' : 'disabled' }}</p>
 
-                    <h3>{{ Auth::user()->google2fa_secret }}</h3>
+                    {{-- <h3>{{ Auth::user()->google2fa_secret }}</h3> --}}
+
+                    <p>Set up your two factor authentication by scanning the barcode below with you Google Authenticator app.</p>
+
+                    <small>Alternatively, you can use the code <strong>{{ Auth::user()->google2fa_secret }}</strong> </small>
+
+                    <div>
+                        {!! $qrcode_svg !!}
+                    </div>
+                 
+                    {{-- <p>Take note of the <strong>OTP</strong> generated on your Authenticator App.You will be unable to login otherwise </p> --}}
 
                     <div class="row mb-0">
                         <div class="col-md-4">
