@@ -7,23 +7,13 @@ Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// 0. Profile -> Security ...
-// 1. Enable 2FA 
-// 2. Show / Scan QR Code 
-// 3. Enter OTP
-
-Route::get('/2fa', [HomeController::class, 'show2faQrcode'])
-    ->middleware('password.confirm')
-    ->name('2fa.qrcode');
-
-Route::post('/2fa', [HomeController::class, 'toogle2fa'])
-    ->middleware('password.confirm')
-    ->name('2fa.toogle');
-
-Route::get('/2fa/otp', [HomeController::class, 'show2faOtp'])
-    ->middleware('password.confirm')
-    ->name('2fa.otp');
-
-Route::post('/2fa/otp', [HomeController::class, 'verify2faOtp'])
-    ->middleware('password.confirm')
-    ->name('2fa.otp.verify');
+Route::group(['prefix' => '/2fa', 'as' => '2fa.', 'middleware' => 'password.confirm'], function () {
+    // Toogle 2FA ON | OFF
+    Route::post('/', [HomeController::class, 'toogle2fa'])->name('toogle');
+    // Show QR Code
+    Route::get('/qrcode', [HomeController::class, 'show2faQrcode'])->name('qrcode');
+    // Show enter OTP
+    Route::get('/otp', [HomeController::class, 'show2faOtp'])->name('otp');
+    // Validate OTP
+    Route::post('/otp', [HomeController::class, 'verify2faOtp'])->name('otp.verify');
+});

@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    <p>{{ Auth::user()->google2fa_enabled ? 'enabled' : 'disabled' }}</p>
+                    <p>OTP is <strong>{{ Auth::user()->google2fa_enabled ? 'enabled' : 'disabled' }}</strong>.</p>
 
                     <form id="toogle-2fa-form" action="{{ route('2fa.toogle') }}" method="POST">
                         @csrf

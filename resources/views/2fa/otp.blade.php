@@ -14,11 +14,11 @@
                         </div>
                     @endif
 
-                    <p>{{ Auth::user()->google2fa_enabled ? 'enabled' : 'disabled' }}</p>
+                    <p>OTP is <strong>{{ Auth::user()->google2fa_enabled ? 'enabled' : 'disabled' }}</strong>.</p>
 
                     <small class="d-block mb-2">Must have scan the QRCode with the Google Authenticator App to get an OTP</small>
 
-                    <form method="POST" action="{{-- route('2fa.opt.verify') --}}">
+                    <form method="POST" action="{{ route('2fa.otp.verify') }}">
                         @csrf
 
                         <div class="row mb-3">
