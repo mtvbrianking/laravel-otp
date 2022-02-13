@@ -20,6 +20,7 @@ class HomeController extends Controller
         $this->middleware('auth')->except([
             'show2faQrcode',
             'show2faOtp',
+            'verify2faOtp',
         ]);
     }
 
@@ -97,10 +98,10 @@ class HomeController extends Controller
             'otp' => [
                 'required',
                 'digits:6',
-                function ($attribute, $value, $fail) use($request) {
+                function ($attribute, $value, $fail) use($request, $user) {
                     $google2fa = Container::getInstance()->make('pragmarx.google2fa');
 
-                    $google2fa_secret = $request->session()->get('google2fa_secret', $request->user()->google2fa_secret);
+                    $google2fa_secret = $request->session()->get('google2fa_secret', $user->google2fa_secret);
 
                     if (! $google2fa_secret || ! $google2fa->verifyKey($google2fa_secret, $value)) {
                         $fail('The '.$attribute.' is invalid.');
@@ -115,7 +116,12 @@ class HomeController extends Controller
             $user->save();
         }
 
-        $request->session()->put('auth.otp_confirmed_at', time());
+        if(! $request->user()) {
+            Auth::guard()->login($user, $request->session()->pull('remember'));
+
+            $request->session()->forget(['user', 'remember']);
+            $request->session()->put('auth.otp_confirmed_at', time());
+        }
 
         return $request->wantsJson()
             ? new JsonResponse([], 204)
@@ -124,7 +130,7 @@ class HomeController extends Controller
 
     protected function getUser(Request $request)
     {
-        $user = $request->user() ?: $request->session()->put('user');
+        $user = $request->user() ?: $request->session()->get('user');
 
         if(! $user) {
             throw new AuthenticationException('Unauthenticated.');
