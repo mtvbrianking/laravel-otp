@@ -16,8 +16,6 @@
 
                     <p>OTP is <strong>{{ Auth::user()->google2fa_enabled ? 'enabled' : 'disabled' }}</strong>.</p>
 
-                    <small class="d-block mb-2">Must have scan the QRCode with the Google Authenticator App to get an OTP</small>
-
                     <form method="POST" action="{{ route('2fa.otp.verify') }}">
                         @csrf
 
@@ -35,14 +33,16 @@
                         </div>
 
                         <div class="row mb-0">
-                            <div class="col-md-4">
-                                <a class="btn btn-default" href="{{ route('2fa.qrcode') }}">
-                                    {{ __('Rescan QRCode') }}
-                                </a>
-                            </div>
+                            @if(! Auth::user()->google2fa_enabled)
+                                <div class="col-md-4">
+                                    <a class="btn btn-secondary" href="{{ route('2fa.qrcode') }}">
+                                        {{ __('No OTP! Setup 2FA') }}
+                                    </a>
+                                </div>
+                            @endif
                             <div class="col-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    {{ __('Complete Setup') }}
+                                    {{ __('Confirm OTP') }}
                                 </button>
                             </div>
                         </div>

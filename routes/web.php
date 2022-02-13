@@ -1,11 +1,14 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])
+    // ->middleware('otp.confirm')
+    ->name('home');
 
 Route::group(['prefix' => '/2fa', 'as' => '2fa.', 'middleware' => 'password.confirm'], function () {
     // Toogle 2FA ON | OFF
@@ -17,3 +20,11 @@ Route::group(['prefix' => '/2fa', 'as' => '2fa.', 'middleware' => 'password.conf
     // Validate OTP
     Route::post('/otp', [HomeController::class, 'verify2faOtp'])->name('otp.verify');
 });
+
+// Route::get('/otp', [HomeController::class, 'showConfirmOTP'])->name('opt.confirm');
+
+Route::get('/profile', function(Request $request) {
+        return $request->user();
+    })
+    ->middleware(['auth', 'otp.confirm'])
+    ->name('profile');
