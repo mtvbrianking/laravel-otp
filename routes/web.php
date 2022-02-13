@@ -6,11 +6,9 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('/', [HomeController::class, 'index'])
-    // ->middleware('otp.confirm')
-    ->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::group(['prefix' => '/2fa', 'as' => '2fa.', 'middleware' => 'password.confirm'], function () {
+Route::group(['prefix' => '/2fa', 'as' => '2fa.'], function () {
     // Toogle 2FA ON | OFF
     Route::post('/', [HomeController::class, 'toogle2fa'])->name('toogle');
     // Show QR Code

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Providers\RouteServiceProvider;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Container\Container;
 use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Http\Request;
@@ -16,7 +17,10 @@ class HomeController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except([
+            'show2faQrcode',
+            'show2faOtp',
+        ]);
     }
 
     public function index(Request $request)
@@ -41,10 +45,11 @@ class HomeController extends Controller
 
     public function show2faQrcode(Request $request)
     {
-        $user = $request->user();
+        $user = $this->getUser($request);
 
         if($user->google2fa_enabled) {
-            return redirect()->route('home')->with('status', "2FA is already enabled.");
+            // return redirect()->route('home')->with('status', "2FA is already enabled.");
+            return redirect()->route('2fa.otp')->with('status', "2FA is already enabled.");
         }
 
         $google2fa = Container::getInstance()->make('pragmarx.google2fa');
@@ -75,12 +80,14 @@ class HomeController extends Controller
         //     return redirect()->route('2fa.qrcode');
         // }
 
-        return view('2fa.otp');
+        $user = $this->getUser($request);
+
+        return view('2fa.otp', ['user' => $user]);
     }
 
     public function verify2faOtp(Request $request)
     {
-        $user = $request->user();
+        $user = $this->getUser($request);
 
         // if($user->google2fa_enabled) {
         //     return redirect()->route('home')->with('status', "2FA is already enabled.");
@@ -95,7 +102,7 @@ class HomeController extends Controller
 
                     $google2fa_secret = $request->session()->get('google2fa_secret', $request->user()->google2fa_secret);
 
-                    if (! $google2fa->verifyKey($google2fa_secret, $value)) {
+                    if (! $google2fa_secret || ! $google2fa->verifyKey($google2fa_secret, $value)) {
                         $fail('The '.$attribute.' is invalid.');
                     }
                 },
@@ -113,5 +120,16 @@ class HomeController extends Controller
         return $request->wantsJson()
             ? new JsonResponse([], 204)
             : redirect()->intended($this->redirectPath())->with('status', "Valid OTP.");
+    }
+
+    protected function getUser(Request $request)
+    {
+        $user = $request->user() ?: $request->session()->put('user');
+
+        if(! $user) {
+            throw new AuthenticationException('Unauthenticated.');
+        }
+        
+        return $user;
     }
 }
