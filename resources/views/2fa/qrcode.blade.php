@@ -3,8 +3,8 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
+        <div class="col-md-6">
+            <div class="card mb-3">
                 <div class="card-header">{{ __('2FA - QR Code') }}</div>
 
                 <div class="card-body">
@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    <p>OTP is <strong>{{ Auth::user()->google2fa_enabled ? 'enabled' : 'disabled' }}</strong>.</p>
+                    <p>OTP is <strong>{{ $user->google2fa_enabled ? 'enabled' : 'disabled' }}</strong>.</p>
 
                     <p>Set up your two factor authentication by scanning the barcode below with you Google Authenticator app.</p>
 
@@ -36,6 +36,14 @@
                             </a>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header">{{ __('Session') }}</div>
+                <div class="card-body">
+                    <pre>{!! json_encode(request()->session()->all(), JSON_PRETTY_PRINT) !!}</pre>
                 </div>
             </div>
         </div>

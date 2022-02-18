@@ -3,8 +3,8 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
+        <div class="col-md-6">
+            <div class="card mb-3">
                 <div class="card-header">{{ __('Dashboard') }}</div>
 
                 <div class="card-body">
@@ -25,6 +25,14 @@
                             <label class="form-check-label" for="google2fa-enabled"> 2-Step Authentication</label>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header">{{ __('Session') }}</div>
+                <div class="card-body">
+                    <pre>{!! json_encode(request()->session()->all(), JSON_PRETTY_PRINT) !!}</pre>
                 </div>
             </div>
         </div>

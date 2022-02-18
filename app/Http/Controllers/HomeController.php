@@ -24,7 +24,7 @@ class HomeController extends Controller
         ]);
     }
 
-    public function index(Request $request)
+    public function index()
     {
         return view('home');
     }
@@ -66,6 +66,7 @@ class HomeController extends Controller
         );
 
         return view('2fa.qrcode', [
+            'user' => $user,
             'qrcode_svg' => $qrcode_svg, 
             'google2fa_secret' => $google2fa_secret,
         ]);
@@ -119,7 +120,7 @@ class HomeController extends Controller
         if(! $request->user()) {
             Auth::guard()->login($user, $request->session()->pull('remember'));
 
-            $request->session()->forget(['user', 'remember']);
+            $request->session()->forget('user');
             $request->session()->put('auth.otp_confirmed_at', time());
         }
 
