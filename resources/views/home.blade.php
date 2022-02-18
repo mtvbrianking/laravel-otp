@@ -14,14 +14,14 @@
                         </div>
                     @endif
 
-                    <p>OTP is <strong>{{ Auth::user()->google2fa_enabled ? 'enabled' : 'disabled' }}</strong>.</p>
+                    <p>2FA is <strong>{{ Auth::user()->two_factor_enabled ? 'enabled' : 'disabled' }}</strong>.</p>
 
                     <form id="toogle-2fa-form" action="{{ route('2fa.toogle') }}" method="POST">
                         @csrf
                         <div class="form-check form-switch mt-2">
                             <input class="form-check-input" type="checkbox" 
-                                id="google2fa-enabled" name="google2fa_enabled" value="1" 
-                                @if(Auth::user()->google2fa_enabled) checked @endif>
+                                id="google2fa-enabled" name="two_factor_enabled" value="1" 
+                                @if(Auth::user()->two_factor_enabled) checked @endif>
                             <label class="form-check-label" for="google2fa-enabled"> 2-Step Authentication</label>
                         </div>
                     </form>

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Add2faToUsersTable extends Migration
+class AddTwoFactorColumnsToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,9 @@ class Add2faToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->boolean('google2fa_enabled')->default(false);
-            $table->string('google2fa_secret')->nullable();
+            $table->boolean('two_factor_enabled')->default(false);
+            $table->string('two_factor_secret')->nullable();
+            $table->text('two_factor_recovery_codes')->nullable();
         });
     }
 
@@ -27,8 +28,9 @@ class Add2faToUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('google2fa_enabled');
-            $table->dropColumn('google2fa_secret');
+            $table->dropColumn('two_factor_recovery_codes');
+            $table->dropColumn('two_factor_secret');
+            $table->dropColumn('two_factor_enabled');
         });
     }
 }

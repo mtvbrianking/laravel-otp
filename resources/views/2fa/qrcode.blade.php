@@ -14,11 +14,11 @@
                         </div>
                     @endif
 
-                    <p>OTP is <strong>{{ $user->google2fa_enabled ? 'enabled' : 'disabled' }}</strong>.</p>
+                    <p>2FA is <strong>{{ $user->two_factor_enabled ? 'enabled' : 'disabled' }}</strong>.</p>
 
                     <p>Set up your two factor authentication by scanning the barcode below with you Google Authenticator app.</p>
 
-                    <small>Alternatively, you can use the code <strong>{{ $google2fa_secret }}</strong> </small>
+                    <small>Alternatively, you can use the code <strong>{{ $two_factor_secret }}</strong> </small>
 
                     <div>
                         {!! $qrcode_svg !!}

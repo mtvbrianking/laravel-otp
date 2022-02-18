@@ -33,12 +33,12 @@ class HomeController extends Controller
     {
         $user = $request->user();
 
-        if($request->has('google2fa_enabled')) {
+        if($request->has('two_factor_enabled')) {
             return redirect()->route('2fa.qrcode');
         }
 
-        $user->google2fa_enabled = false;
-        $user->google2fa_secret = '';
+        $user->two_factor_enabled = false;
+        $user->two_factor_secret = '';
         $user->save();
 
         return redirect()->back();
@@ -48,37 +48,37 @@ class HomeController extends Controller
     {
         $user = $this->getUser($request);
 
-        if($user->google2fa_enabled) {
+        if($user->two_factor_enabled) {
             // return redirect()->route('home')->with('status', "2FA is already enabled.");
             return redirect()->route('2fa.otp')->with('status', "2FA is already enabled.");
         }
 
         $google2fa = Container::getInstance()->make('pragmarx.google2fa');
 
-        $google2fa_secret = $google2fa->generateSecretKey();
+        $two_factor_secret = $google2fa->generateSecretKey();
 
-        $request->session()->put('google2fa_secret', $google2fa_secret);
+        $request->session()->put('two_factor_secret', $two_factor_secret);
 
         $qrcode_svg = $google2fa->getQRCodeInline(
             config('app.name'),
             $user->email,
-            $google2fa_secret,
+            $two_factor_secret,
         );
 
         return view('2fa.qrcode', [
             'user' => $user,
             'qrcode_svg' => $qrcode_svg, 
-            'google2fa_secret' => $google2fa_secret,
+            'two_factor_secret' => $two_factor_secret,
         ]);
     }
 
     public function show2faOtp(Request $request)
     {
-        // if($request->user()->google2fa_enabled) {
+        // if($request->user()->two_factor_enabled) {
         //     return redirect()->route('home')->with('status', "2FA is already enabled.");
         // }
 
-        // if(! $request->user()->google2fa_enabled) {
+        // if(! $request->user()->two_factor_enabled) {
         //     return redirect()->route('2fa.qrcode');
         // }
 
@@ -91,7 +91,7 @@ class HomeController extends Controller
     {
         $user = $this->getUser($request);
 
-        // if($user->google2fa_enabled) {
+        // if($user->two_factor_enabled) {
         //     return redirect()->route('home')->with('status', "2FA is already enabled.");
         // }
 
@@ -102,18 +102,18 @@ class HomeController extends Controller
                 function ($attribute, $value, $fail) use($request, $user) {
                     $google2fa = Container::getInstance()->make('pragmarx.google2fa');
 
-                    $google2fa_secret = $request->session()->get('google2fa_secret', $user->google2fa_secret);
+                    $two_factor_secret = $request->session()->get('two_factor_secret', $user->two_factor_secret);
 
-                    if (! $google2fa_secret || ! $google2fa->verifyKey($google2fa_secret, $value)) {
+                    if (! $two_factor_secret || ! $google2fa->verifyKey($two_factor_secret, $value)) {
                         $fail('The '.$attribute.' is invalid.');
                     }
                 },
             ]
         ]);
 
-        if(! $user->google2fa_enabled) {
-            $user->google2fa_enabled = true;
-            $user->google2fa_secret = $request->session()->pull('google2fa_secret');
+        if(! $user->two_factor_enabled) {
+            $user->two_factor_enabled = true;
+            $user->two_factor_secret = $request->session()->pull('two_factor_secret');
             $user->save();
         }
 

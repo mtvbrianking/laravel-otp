@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    <p>OTP is <strong>{{ $user->google2fa_enabled ? 'enabled' : 'disabled' }}</strong>.</p>
+                    <p>2FA is <strong>{{ $user->two_factor_enabled ? 'enabled' : 'disabled' }}</strong>.</p>
 
                     <form method="POST" action="{{ route('2fa.otp.verify') }}">
                         @csrf
@@ -33,13 +33,14 @@
                         </div>
 
                         <div class="row mb-0">
-                            @if(! $user->google2fa_enabled)
+                            @if(! $user->two_factor_enabled)
                                 <div class="col-md-4">
                                     <a class="btn btn-secondary" href="{{ route('2fa.qrcode') }}">
-                                        {{ __('No OTP! Setup 2FA') }}
+                                        {{ __('Setup 2FA') }}
                                     </a>
                                 </div>
                             @endif
+                            
                             <div class="col-md-4">
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Confirm OTP') }}
