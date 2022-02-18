@@ -14,14 +14,27 @@
                         </div>
                     @endif
 
-                    <p>2FA is <strong>{{ $user->two_factor_enabled ? 'enabled' : 'disabled' }}</strong>.</p>
+                    <div class="row">
+                        <div class="col">
+                            <p>2FA is <strong>{{ $user->two_factor_enabled ? 'enabled' : 'disabled' }}</strong>.</p>
 
-                    <p>Set up your two factor authentication by scanning the barcode below with you Google Authenticator app.</p>
+                            <p>Set up your two factor authentication by scanning the barcode below with your Authenticator app.</p>
 
-                    <small>Alternatively, you can use the code <strong>{{ $two_factor_secret }}</strong> </small>
+                            <small>Alternatively, you can use the code <code>{{ $two_factor_secret }}</code> </small>
+                        </div>
+                    </div>
 
-                    <div>
-                        {!! $qrcode_svg !!}
+                    <div class="row">
+                        <div class="col">
+                            {!! $qrcode_svg !!}
+                        </div>
+
+                        <div class="col">
+                            <h4>Recovery Codes</h4>
+                            @foreach(json_decode(decrypt(auth()->user()->two_factor_recovery_codes, true)) as $code)
+                                <code>{{ trim($code) }}</code><br/>
+                            @endforeach
+                        </div>
                     </div>
 
                     <div class="row mb-0">
@@ -39,6 +52,9 @@
                 </div>
             </div>
         </div>
+
+        {{-- $user->recoveryCodes() --}}
+
         <div class="col-md-6">
             <div class="card mb-3">
                 <div class="card-header">{{ __('Session') }}</div>

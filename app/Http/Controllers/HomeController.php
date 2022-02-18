@@ -8,6 +8,8 @@ use Illuminate\Container\Container;
 use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 
 class HomeController extends Controller
 {
@@ -114,6 +116,14 @@ class HomeController extends Controller
         if(! $user->two_factor_enabled) {
             $user->two_factor_enabled = true;
             $user->two_factor_secret = $request->session()->pull('two_factor_secret');
+            $user->two_factor_recovery_codes = encrypt(json_encode(Collection::times(8, function () { 
+                return $this->generateRecoveryCode(); 
+            })->all()));
+            // $user->two_factor_recovery_codes = encrypt(str_replace(
+            //     $code,
+            //     $this->generateRecoveryCode(),
+            //     decrypt($this->two_factor_recovery_codes)
+            // ));
             $user->save();
         }
 
@@ -138,5 +148,10 @@ class HomeController extends Controller
         }
         
         return $user;
+    }
+
+    protected function generateRecoveryCode()
+    {
+        return Str::random(10).'-'.Str::random(10);
     }
 }
