@@ -21,7 +21,7 @@
 
                         <div class="row mb-3">
                             <div class="col">
-                                <input type="number" class="form-control @error('otp') is-invalid @enderror" 
+                                <input type="number" class="form-control @error('otp') is-invalid @enderror"
                                     id="otp" name="otp" placeholder="Enter OTP" pattern="[0-9]{6}" required autofocus />
 
                                 @error('otp')
@@ -40,7 +40,7 @@
                                     </a>
                                 </div>
                             @endif
-                            
+
                             <div class="col-md-4">
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Confirm OTP') }}

@@ -28,13 +28,6 @@
                         <div class="col">
                             {!! $qrcode_svg !!}
                         </div>
-
-                        <div class="col">
-                            <h4>Recovery Codes</h4>
-                            @foreach(json_decode(decrypt(auth()->user()->two_factor_recovery_codes, true)) as $code)
-                                <code>{{ trim($code) }}</code><br/>
-                            @endforeach
-                        </div>
                     </div>
 
                     <div class="row mb-0">

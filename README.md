@@ -1,45 +1,43 @@
-Features
+Laravel OTP Demo
 
-- Registration is free.
+**Getting started**
 
-- 2FA is optional ie users can opt-in and opt-out at anytime.
-  
-  A user needs to confirm their password in order to enable or disable 2FA
+```bash
+git clone git@github.com:mtvbrianking/laravel-otp.git
 
-- Recovery codes
+cd laravel-otp
 
-- Google Authenticator
+# Laravel v8 works best on PHP v7.4
+php7.4 -v
 
-- Middleware to protect certain routes. Enforced on login by default
+# Fix this to 7.4
+composer update
 
-{b} matovu, [2/9/22 11:55 PM]
-You can enforce 2FA
+# post-autoload-dump
+php7.4 artisan package:discover --ansi
 
-APP_ENFORCE_2FA=true
+# post-update-cmd
+php7.4 artisan vendor:publish --tag=laravel-assets --ansi --force
 
-ie a user must setup 2fa after setting up a password
+npm install
 
-If 2fa isn’t enabled — show opt-in page
-Else show enter otp screen
+cp -rp .env.example .env
 
-{b} matovu, [2/9/22 11:57 PM]
-2FA can be used on secure routes
+vi .env
 
-If 2fa is enabled — accept otp
-Else — use password
+php7.4 artisan key:generate
 
-{b} matovu, [2/10/22 12:01 AM]
-Unit and feature tests for otp functionality
+php7.4 artisan migrate
 
+php7.4 artisan serve
+```
 
-Tutorials
+**Tutorials**
 
 - https://dev.to/roxie/how-to-add-google-s-two-factor-authentication-to-a-laravel-8-application-4jjp
 
 - https://shouts.dev/laravel-two-factor-authentication-with-google-authenticator
 
-- https://www.youtube.com/watch?v=B-Iu1QGkP-o
+- https://www.youtube.com/watch?v=4osPfTw-FB0
 
-- https://www.youtube.com/watch?v=jJKWDDj1Wgw
-
-- https://www.youtube.com/watch?v=kPopzdiGR-U
+- https://www.youtube.com/watch?v=Gj-fHq4NPXk

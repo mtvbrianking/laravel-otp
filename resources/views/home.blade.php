@@ -19,12 +19,34 @@
                     <form id="toogle-2fa-form" action="{{ route('2fa.toogle') }}" method="POST">
                         @csrf
                         <div class="form-check form-switch mt-2">
-                            <input class="form-check-input" type="checkbox" 
-                                id="google2fa-enabled" name="two_factor_enabled" value="1" 
+                            <input class="form-check-input" type="checkbox"
+                                id="google2fa-enabled" name="two_factor_enabled" value="1"
                                 @if(Auth::user()->two_factor_enabled) checked @endif>
                             <label class="form-check-label" for="google2fa-enabled"> 2-Step Authentication</label>
                         </div>
                     </form>
+
+                    <div class="mt-3">
+                        <h5>Recovery Codes</h5>
+                        @foreach(json_decode(decrypt(auth()->user()->two_factor_recovery_codes, true)) as $code)
+                            <code>{{ trim($code) }}</code><br/>
+                        @endforeach
+                    </div>
+
+                    @if(Auth::user()->two_factor_enabled)
+                    <div class="my-3">
+                        <form method="POST" action="{{-- route('2fa.codes.generate') --}}">
+                            @csrf
+                            <div class="row mb-0">
+                                <div class="col">
+                                    <button type="submit" class="btn btn-primary">
+                                        {{ __('Regenerate Codes') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>

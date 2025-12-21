@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Auth::routes();
@@ -21,8 +22,8 @@ Route::group(['prefix' => '/2fa', 'as' => '2fa.'], function () {
 
 // Route::get('/otp', [HomeController::class, 'showConfirmOTP'])->name('opt.confirm');
 
-Route::get('/profile', function(Request $request) {
-        return $request->user();
-    })
+Route::get('/profile', function (Request $request) {
+    return $request->user();
+})
     ->middleware(['auth', 'otp.confirm'])
     ->name('profile');
